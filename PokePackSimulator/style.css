@@ -374,13 +374,26 @@ body {
     justify-content: center;
     gap: 15px;
     width: 100%;
-    max-width: 400px;
+    max-width: 480px;
+    /* Increased from 400px to match app container width */
     padding: 20px 0 35px 0;
     /* Add bottom padding to push buttons up from edge */
     background: #fff;
     /* Solid white background */
-    border-top: 2px solid #ccc;
+    /* border-top: 2px solid #ccc; Removed to use pseudo-element for custom width */
     z-index: 10;
+}
+
+.reveal-controls::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    /* Not full width */
+    height: 2px;
+    background-color: #ccc;
 }
 
 .white-card {
@@ -406,56 +419,56 @@ body {
 
 .white-card.rarity-crown {
     background-image: url('images/クラウン.png');
-    background-size: cover;
+    background-size: 104%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-rainbow2 {
     background-image: url('images/色違い.png');
-    background-size: cover;
+    background-size: 104%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-rainbow {
     background-image: url('images/色違い.png');
-    background-size: cover;
+    background-size: 104%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-star3 {
     background-image: url('images/イマーシブ.png');
-    background-size: cover;
+    background-size: 104%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-star2 {
     background-image: url('images/星2.png');
-    background-size: cover;
+    background-size: 104%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-star1 {
     background-image: url('images/星1.png');
-    background-size: cover;
+    background-size: 104%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-dia4 {
     background-image: url('images/ダイヤ4.png');
-    background-size: cover;
+    background-size: 104%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-dia3 {
     background-image: url('images/ダイヤ3.png');
-    background-size: cover;
+    background-size: 104%;
     background-position: center;
     border: 2px solid transparent;
     /* Keep size consistent with other cards (80+2+2 = 84px) */
@@ -801,6 +814,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 48px;
+    max-width: 200px;
+    /* Prevent buttons from stretching too wide */
     /* Fixed height for consistency */
 }
 
@@ -959,8 +974,8 @@ body {
     /* Red color */
     font-weight: bold;
     font-size: 14px;
-    z-index: 1000;
-    /* Extremely high z-index to ensure visibility */
+    z-index: 5;
+    /* Lowered from 1000 to 5 to stay behind footer (z-index 10) */
     text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
     /* White outline for readability */
     white-space: nowrap;
@@ -977,7 +992,7 @@ body {
     /* Orange color */
     font-weight: bold;
     font-size: 14px;
-    z-index: 1000;
+    z-index: 5;
     text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
     /* White outline for readability */
     white-space: nowrap;
