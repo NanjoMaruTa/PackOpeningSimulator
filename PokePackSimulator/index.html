@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パック開封シミュレータ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>パック開封シミュレータ</h1>
+        </header>
+
+        <main class="main-content">
+            <!-- Session Stats Bar (Fixed below header, initially hidden) -->
+            <div class="session-stats-bar hidden" id="sessionStatsBar">
+                <!-- Injected by JS -->
+            </div>
+
+            <div class="pack-container" id="packContainer">
+                <div class="pixel-sparkles"></div>
+                <div class="pack-wrapper">
+                    <!-- 上部の破れる部分 -->
+                    <div class="pack-top" id="packTop">
+                        <img src="images/pack.png" alt="Card Pack Top" class="pack-image-top">
+                    </div>
+                    <!-- パック本体 -->
+                    <div class="pack-body" id="packBody">
+                        <img src="images/pack.png" alt="Card Pack Body" class="pack-image-body">
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-container" id="controlsContainer">
+                <div class="primary-actions">
+                    <button class="btn-primary" id="btnOpen1">
+                        <span class="btn-text">1パック開封</span>
+                    </button>
+                    <button class="btn-primary" id="btnOpen10">
+                        <span class="btn-text">10パック開封</span>
+                    </button>
+                </div>
+
+                <div class="secondary-actions">
+                    <button class="btn-secondary" id="btnProb">確率変更</button>
+                    <button class="btn-secondary" id="btnCount">レアリティ枚数</button>
+                </div>
+            </div>
+
+            <!-- Card Reveal Screen (Hidden by default) -->
+            <div class="card-reveal-screen hidden" id="cardRevealScreen">
+                <div class="cards-grid" id="cardsGrid">
+                    <!-- Cards will be injected here via JS -->
+                </div>
+                <div class="reveal-controls">
+                    <button id="btnReopen">もう一度開封する</button>
+                    <button id="btnBackToHome">ホームに戻る</button>
+                </div>
+            </div>
+
+            <!-- Rarity Probability Settings (Existing) -->
+            <div class="settings-screen hidden" id="settingsScreen">
+                <h2>確率設定</h2>
+
+                <div class="setting-item">
+                    <label for="probInput">6枚封入 (%):</label>
+                    <input type="number" id="probInput" min="0" max="100" step="0.1">
+                </div>
+                <div class="setting-item">
+                    <label for="godProbInput">レア封入 (%):</label>
+                    <input type="number" id="godProbInput" min="0" max="100" step="0.01">
+                </div>
+
+                <div class="rarity-settings-wrapper">
+                    <div class="settings-actions">
+                        <button class="btn-secondary btn-preset" id="btnPresets">プリセット</button>
+                    </div>
+
+                    <!-- Dynamic Inputs Container for Probabilities -->
+                    <div id="raritySettingsContainer" class="rarity-settings-container">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button class="btn-secondary" id="btnCancelSettings">キャンセル</button>
+                    <button class="btn-primary" id="btnSaveSettings">保存</button>
+                </div>
+            </div>
+
+            <!-- Rarity Count Settings (New) -->
+            <div class="settings-screen hidden" id="countSettingsScreen">
+                <h2>カード枚数設定</h2>
+                <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">各レアリティの全種類数を設定してください</p>
+
+                <div class="rarity-settings-wrapper">
+                    <!-- Dynamic Inputs Container for Counts -->
+                    <div id="countSettingsContainer" class="rarity-settings-container">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button class="btn-secondary" id="btnCancelCountSettings">キャンセル</button>
+                    <button class="btn-primary" id="btnSaveCountSettings">保存</button>
+                </div>
+            </div>
+            <!-- Preset Modal -->
+            <div class="preset-modal hidden" id="presetModal">
+                <div class="preset-modal-content">
+                    <h3>プリセット管理</h3>
+                    <div class="preset-actions">
+                        <input type="text" id="newPresetName" placeholder="プリセット名を入力">
+                        <button class="btn-primary" id="btnSaveNewPreset">新規保存</button>
+                    </div>
+                    <ul class="preset-list" id="presetList">
+                        <!-- Presets injected here -->
+                    </ul>
+                    <button class="btn-secondary" id="btnClosePresets">閉じる</button>
+                </div>
+                <!-- Confirm Modal -->
+                <div class="preset-modal hidden" id="confirmModal">
+                    <div class="preset-modal-content confirm-modal-content">
+                        <h3 id="confirmMessage">本当に削除しますか？</h3>
+                        <div class="confirm-actions">
+                            <button class="btn-secondary" id="btnConfirmCancel">キャンセル</button>
+                            <button class="btn-primary btn-danger" id="btnConfirmOk">削除する</button>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
