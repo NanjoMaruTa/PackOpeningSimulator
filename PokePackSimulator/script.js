@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const controlsContainer = document.getElementById('controlsContainer');
     const cardRevealScreen = document.getElementById('cardRevealScreen');
     const cardsGrid = document.getElementById('cardsGrid');
+    const sessionStatsBar = document.getElementById('sessionStatsBar');
+    const desiredStatsBar = document.getElementById('desiredStatsBar');
 
     // Settings elements
     const btnProb = document.getElementById('btnProb');
@@ -114,10 +116,13 @@ document.addEventListener('DOMContentLoaded', () => {
         packContainer.classList.add('hidden');
         controlsContainer.classList.add('hidden');
 
-        // Show Stats Bar (Fixed position)
+        // Show Stats Bars (Fixed position)
         if (sessionStatsBar) {
             sessionStatsBar.classList.remove('hidden');
             document.querySelector('.main-content').classList.add('has-stats');
+        }
+        if (desiredStatsBar) {
+            desiredStatsBar.classList.remove('hidden');
         }
 
         // Show card reveal screen
@@ -412,8 +417,6 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // Stats Logic
-    const sessionStatsBar = document.getElementById('sessionStatsBar');
-
     function updateStatsBar() {
         const costHourglass = sessionPackCount * 12;
         const costGold = sessionPackCount * 6;
@@ -445,10 +448,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide card screen
         cardRevealScreen.classList.add('hidden');
 
-        // Hide Stats Bar
+        // Hide Stats Bars
         if (sessionStatsBar) {
             sessionStatsBar.classList.add('hidden');
             document.querySelector('.main-content').classList.remove('has-stats');
+        }
+        if (desiredStatsBar) {
+            desiredStatsBar.classList.add('hidden');
         }
 
         // Reset scroll position for next time
