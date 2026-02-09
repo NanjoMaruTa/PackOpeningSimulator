@@ -61,6 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Session Stats State
     let sessionPackCount = 0;
 
+    // Session Desired Card Stats: { 'rarity-number': count }
+    let sessionDesiredCards = {};
+
     // God Pack Mode: 'uniform', 'no-rainbow', 'custom'
     let godPackMode = 'no-rainbow'; // Default: exclude rainbow cards
 
@@ -68,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function openPack(count) {
         lastOpenedCount = count; // Memorize count
         sessionPackCount = count; // Reset/Init session count for new open from home
+        sessionDesiredCards = {}; // Reset desired card tracking
 
         if (packContainer.classList.contains('shake') || packTop.classList.contains('torn')) {
             return; // Animation in progress
@@ -142,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update Stats Bar
         updateStatsBar();
+        updateDesiredStatsBar();
 
         // Reset scroll position to top (Done after generation to work for both re-open and home return)
         cardRevealScreen.scrollTop = 0;
@@ -323,6 +328,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // [New] Update pack desired status if this card is desired
                 if (isDesired) {
                     packHasDesired = true;
+
+                    // Track this desired card for session stats
+                    const key = `${rarity}-${cardNum}`;
+                    if (!sessionDesiredCards[key]) {
+                        sessionDesiredCards[key] = { rarity, number: cardNum, count: 0 };
+                    }
+                    sessionDesiredCards[key].count++;
                 }
             }
 
@@ -443,6 +455,49 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function updateDesiredStatsBar() {
+        // Clear existing
+        desiredStatsBar.innerHTML = '';
+
+        // Create left side label "ほしい!!"
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'desired-label';
+        labelSpan.textContent = 'ほしい!!';
+        desiredStatsBar.appendChild(labelSpan);
+
+        // Create container for stats items (to allow flex layout)
+        const itemsContainer = document.createElement('div');
+        itemsContainer.className = 'desired-items';
+        desiredStatsBar.appendChild(itemsContainer);
+
+        // Get all pulled desired cards and sort them
+        const pulledCards = Object.values(sessionDesiredCards).filter(card => card.count > 0);
+
+        if (pulledCards.length > 0) {
+            // Sort by rarity order
+            const rarityOrder = ['👑', '🌈🌈', '🌈', '☆☆☆', '☆☆', '☆', '♢♢♢♢', '♢♢♢', '♢♢', '♢'];
+            pulledCards.sort((a, b) => {
+                const rarityOrderIdx = (r) => rarityOrder.indexOf(r);
+                const rarityDiff = rarityOrderIdx(a.rarity) - rarityOrderIdx(b.rarity);
+                if (rarityDiff !== 0) return rarityDiff;
+                return a.number - b.number;
+            });
+
+            // Create display text for each pulled card
+            pulledCards.forEach(card => {
+                const cardSpan = document.createElement('span');
+                cardSpan.className = 'stats-item';
+                cardSpan.textContent = `${card.rarity}${card.number}×${card.count}`;
+                itemsContainer.appendChild(cardSpan);
+            });
+        } else {
+            // [New] Show "Nothing" message if no desired cards were pulled
+            const emptySpan = document.createElement('span');
+            emptySpan.className = 'empty-text';
+            emptySpan.textContent = '何もない…';
+            itemsContainer.appendChild(emptySpan);
+        }
+    }
 
     function resetToHome() {
         // Hide card screen

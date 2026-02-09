@@ -306,21 +306,36 @@ body {
     color: #666;
     /* Subtle text color */
     font-weight: 600;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 8px 15px;
     border-bottom: 1px solid #dbdbdb;
     display: flex;
-    gap: 15px;
-    /* Space between items */
-    justify-content: center;
     align-items: center;
     width: 100%;
     /* Ensure it doesn't shrink too much on mobile */
-    flex-wrap: wrap;
     background-color: #fff;
     /* Match session stats bar */
+    box-sizing: border-box;
+}
+
+.desired-label {
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    color: #888;
+}
+
+.desired-items {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.empty-text {
+    font-size: 0.85rem;
+    color: #bbb;
+    font-weight: normal;
+    font-style: italic;
 }
 
 .stats-item {
