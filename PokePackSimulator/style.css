@@ -1093,4 +1093,9 @@ body {
         left: -10px !important;
         /* Force override for mobile */
     }
+
+    /* Increase bottom padding for 10-pack results on mobile */
+    .cards-grid {
+        padding-bottom: 320px;
+    }
 }
