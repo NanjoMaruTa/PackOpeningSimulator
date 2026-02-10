@@ -453,6 +453,9 @@ document.addEventListener('DOMContentLoaded', () => {
             span.textContent = item.text;
             sessionStatsBar.appendChild(span);
         });
+
+        // [New] Dynamic font sizing for mobile
+        adjustFontSizeToFit(sessionStatsBar);
     }
 
     function updateDesiredStatsBar() {
@@ -496,6 +499,32 @@ document.addEventListener('DOMContentLoaded', () => {
             emptySpan.className = 'empty-text';
             emptySpan.textContent = '何もない…';
             itemsContainer.appendChild(emptySpan);
+        }
+
+        // [New] Dynamic font sizing for mobile
+        adjustFontSizeToFit(desiredStatsBar);
+    }
+
+    // Helper: Dynamic font sizing for mobile (<= 480px)
+    function adjustFontSizeToFit(element) {
+        if (window.innerWidth > 480) {
+            element.style.fontSize = ''; // Reset on PC
+            return;
+        }
+
+        // Reset to default to measure correctly
+        element.style.fontSize = '0.95rem';
+        element.style.whiteSpace = 'nowrap'; // Ensure no wrapping for measurement
+
+        const scrollWidth = element.scrollWidth;
+        const clientWidth = element.clientWidth;
+
+        if (scrollWidth > clientWidth) {
+            const ratio = clientWidth / scrollWidth;
+            // Apply ratio with a slight buffer (0.95), minimum 0.5rem
+            let newSize = 0.95 * ratio * 0.95;
+            newSize = Math.max(newSize, 0.5);
+            element.style.fontSize = `${newSize}rem`;
         }
     }
 

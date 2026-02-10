@@ -279,8 +279,6 @@ body {
 }
 
 .session-stats-bar {
-    container-type: inline-size;
-    /* Enable container queries */
     font-size: 0.95rem;
     color: #666;
     /* Subtle text color */
@@ -296,10 +294,7 @@ body {
     align-items: center;
     width: 100%;
     /* Ensure it doesn't shrink too much on mobile */
-    flex-wrap: nowrap;
-    /* Prevent wrapping to force scaling */
-    overflow: hidden;
-    /* Hide overflow if scaling isn't enough */
+    flex-wrap: wrap;
 }
 
 .main-content.has-stats {
@@ -329,15 +324,11 @@ body {
 }
 
 .desired-items {
-    container-type: inline-size;
-    /* Enable container queries for inner items */
     display: flex;
     gap: 15px;
-    flex-wrap: nowrap;
-    /* Prevent wrapping */
+    flex-wrap: wrap;
     justify-content: center;
     flex-grow: 1;
-    overflow: hidden;
 }
 
 .empty-text {
@@ -347,15 +338,10 @@ body {
     font-style: italic;
 }
 
-/* Dynamic font sizing using Container Query Units (cqw) */
 .stats-item {
     display: flex;
     align-items: center;
     gap: 4px;
-    font-size: clamp(0.7rem, 4cqw, 0.95rem);
-    /* Scale between 0.7rem and 0.95rem based on container width */
-    white-space: nowrap;
-    /* Prevent text wrapping inside item */
 }
 
 .card-reveal-screen.is-single-pack {
