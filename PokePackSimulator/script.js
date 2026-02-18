@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnOpen10 = document.getElementById('btnOpen10');
     const btnReopen = document.getElementById('btnReopen');
     const btnBackToHome = document.getElementById('btnBackToHome');
+    const btnUsage = document.getElementById('btnUsage');
 
     // Screens elements
     const packContainer = document.getElementById('packContainer');
@@ -21,6 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const godProbInput = document.getElementById('godProbInput');
     const btnSaveSettings = document.getElementById('btnSaveSettings');
     const btnCancelSettings = document.getElementById('btnCancelSettings');
+
+    // Usage Modal elements
+    const usageModal = document.getElementById('usageModal');
+    const btnCloseUsage = document.getElementById('btnCloseUsage');
+    const usageTabs = document.querySelectorAll('.tab-btn');
+    const usageContents = document.querySelectorAll('.tab-content');
 
     // State
     // State
@@ -127,6 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (desiredStatsBar) {
             desiredStatsBar.classList.remove('hidden');
+        }
+        if (btnUsage) {
+            btnUsage.classList.add('hidden');
         }
 
         // Show card reveal screen
@@ -549,6 +559,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show home screen elements
         packContainer.classList.remove('hidden');
         controlsContainer.classList.remove('hidden');
+        if (btnUsage) {
+            btnUsage.classList.remove('hidden');
+        }
     }
 
     // Settings Logic
@@ -1275,4 +1288,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load active settings on startup
     loadActiveSettings();
+
+    // Usage Modal Logic
+    if (btnUsage) {
+        btnUsage.addEventListener('click', () => {
+            usageModal.classList.remove('hidden');
+        });
+    }
+
+    if (btnCloseUsage) {
+        btnCloseUsage.addEventListener('click', () => {
+            usageModal.classList.add('hidden');
+        });
+    }
+
+    // Close modal when clicking outside content
+    window.addEventListener('click', (e) => {
+        if (e.target === usageModal) {
+            usageModal.classList.add('hidden');
+        }
+    });
+
+    // Tab Switching Logic
+    usageTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs
+            usageTabs.forEach(t => t.classList.remove('active'));
+            // Add active class to clicked tab
+            tab.classList.add('active');
+
+            // Hide all contents
+            usageContents.forEach(content => content.classList.remove('active'));
+            // Show target content
+            const targetId = tab.getAttribute('data-tab');
+            document.getElementById(targetId).classList.add('active');
+        });
+    });
 });

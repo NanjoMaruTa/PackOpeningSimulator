@@ -23,6 +23,8 @@
             <!-- Desired Card Stats Bar (Fixed below session stats, initially hidden) -->
             <div class="desired-stats-bar hidden" id="desiredStatsBar"></div>
 
+            <button id="btnUsage" class="btn-usage">つかいかた</button>
+
             <div class="pack-container" id="packContainer">
                 <div class="pixel-sparkles"></div>
                 <div class="pack-wrapper">
@@ -48,7 +50,7 @@
                 </div>
 
                 <div class="secondary-actions">
-                    <button class="btn-secondary" id="btnProb">確率変更</button>
+                    <button class="btn-secondary" id="btnProb">確率設定</button>
                     <button class="btn-secondary" id="btnCount">レアリティ枚数</button>
                 </div>
             </div>
@@ -96,7 +98,7 @@
 
             <!-- Rarity Count Settings (New) -->
             <div class="settings-screen hidden" id="countSettingsScreen">
-                <h2>カード枚数設定</h2>
+                <h2>レアリティ枚数設定</h2>
                 <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">各レアリティの全種類数を設定してください</p>
 
                 <div class="rarity-settings-wrapper">
@@ -134,8 +136,70 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </main>
     </div>
+
+    <!-- Usage Modal -->
+    <div class="usage-modal hidden" id="usageModal">
+        <div class="usage-content">
+            <button class="close-modal" id="btnCloseUsage">×</button>
+            <h2>つかいかた</h2>
+
+            <div class="usage-tabs">
+                <button class="tab-btn active" data-tab="tabHome">ホーム画面</button>
+                <button class="tab-btn" data-tab="tabPack">パック開封</button>
+                <button class="tab-btn" data-tab="tabProb">確率設定</button>
+                <button class="tab-btn" data-tab="tabRarity">レアリティ枚数</button>
+            </div>
+
+            <div class="tab-content active" id="tabHome">
+                <h3>ホーム画面の機能</h3>
+                <p>このシミュレータの基本画面です。</p>
+                <img src="images/つかいかたホーム画面.png" alt="ホーム画面の解説" class="usage-img">
+                <ul>
+                    <li><strong>1パック開封 / 10パック開封</strong>: ボタンを押すと、設定された確率に基づいてカードが排出されます。</li>
+                    <li><strong>確率設定</strong>: パックの封入内容の確率や、各レアリティの排出確率が変更できます。全体的な設定のプリセットもこのページで変更できます。</li>
+                    <li><strong>レアリティ枚数</strong>: 各レアリティのカードの枚数を変更できます。また、「ほしいカード」を設定できます。</li>
+                    <li><strong>つかいかた</strong>: このウィンドウです。</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="tabPack">
+                <h3>パック開封時の操作</h3>
+                <p>パックを開封した後の画面です。</p>
+                <ul>
+                    <li><strong>結果表示画面</strong>: 出てきたカードの画像、レアリティ、カード番号を確認できます。</li>
+                    <li><strong>開封統計バー</strong>: 画面上部に、現在のセッションで開封したパック数や、シミュレーション上の消費金額（円、ゴールド、砂時計）が表示されます。</li>
+                    <li><strong>ほしいカード統計バー</strong>: 「レアリティ枚数」で設定した「ほしいカード」を獲得すると、統計バーの下に専用のバーが表示されます。</li>
+                    <li><strong>もう一度開封する</strong>: 同じ設定で続けてパックを開封します。</li>
+                    <li><strong>ホームに戻る</strong>: 開封結果を閉じてホーム画面に戻ります。</li>
+                    <li><strong>モバイル表示</strong>: スマホ等の狭い画面では、統計バーの文字サイズが自動調整され、見やすくなります。</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="tabProb">
+                <h3>確率変更機能</h3>
+                <p>各レアリティが出る確率を自由にカスタマイズできます。</p>
+                <ul>
+                    <li><strong>通常確率</strong>: 各レアリティごとの排出率（％）を設定します。合計が100％にならなくても動作しますが、バランスに注意してください。</li>
+                    <li><strong>6枚目の特別枠</strong>: パックの6枚目（レア枠）だけ、別の確率設定を適用できます。</li>
+                    <li><strong>ゴッドパック確率</strong>: 非常に低い確率で発生する、すべてが高レアリティカードになる「ゴッドパック」の出現率を設定できます。</li>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="tabRarity">
+                <h3>レアリティ枚数設定</h3>
+                <p>各レアリティに存在するカードの種類数（No.○○まであるか）を設定します。</p>
+                <ul>
+                    <li><strong>枚数設定</strong>: 実際のゲームに合わせて、各レアリティのカード種類数を入力してください。</li>
+                    <li><strong>ほしいカード設定</strong>: 特定のカード（例：ダイヤ1の1番）を「ほしい！」に設定すると、そのカードが出た時に強調表示され、ホーム画面の統計にも記録されます。
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 
