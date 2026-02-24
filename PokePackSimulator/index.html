@@ -25,6 +25,9 @@
 
             <button id="btnUsage" class="btn-usage">つかいかた</button>
 
+            <!-- Trapezoid background behind pack area -->
+            <div class="pack-bg-trapezoid"></div>
+
             <div class="pack-container" id="packContainer">
                 <div class="pixel-sparkles"></div>
                 <div class="pack-wrapper">
@@ -82,6 +85,13 @@
                 <div class="rarity-settings-wrapper">
                     <div class="settings-actions">
                         <button class="btn-secondary btn-preset" id="btnPresets">プリセット</button>
+                    </div>
+
+                    <!-- Background Color Picker (Test) -->
+                    <div class="bg-color-picker-section">
+                        <label for="bgColorInput">パックカラー:</label>
+                        <input type="color" id="bgColorInput" value="#cc1111">
+                        <button class="btn-secondary" id="btnResetBgColor">リセット</button>
                     </div>
 
                     <!-- Dynamic Inputs Container for Probabilities -->

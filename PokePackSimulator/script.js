@@ -29,6 +29,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const usageTabs = document.querySelectorAll('.tab-btn');
     const usageContents = document.querySelectorAll('.tab-content');
 
+    // Background Color Picker elements
+    const bgColorInput = document.getElementById('bgColorInput');
+    const btnResetBgColor = document.getElementById('btnResetBgColor');
+    const packBgTrapezoid = document.querySelector('.pack-bg-trapezoid');
+    const BG_COLOR_DEFAULT = '#cc1111';
+
+    if (bgColorInput && packBgTrapezoid) {
+        // Load saved color
+        const savedBgColor = localStorage.getItem('bgColor');
+        if (savedBgColor) {
+            bgColorInput.value = savedBgColor;
+            packBgTrapezoid.style.backgroundColor = savedBgColor;
+        }
+
+        bgColorInput.addEventListener('input', () => {
+            packBgTrapezoid.style.backgroundColor = bgColorInput.value;
+            localStorage.setItem('bgColor', bgColorInput.value);
+        });
+    }
+
+    if (btnResetBgColor && packBgTrapezoid) {
+        btnResetBgColor.addEventListener('click', () => {
+            packBgTrapezoid.style.backgroundColor = BG_COLOR_DEFAULT;
+            if (bgColorInput) bgColorInput.value = BG_COLOR_DEFAULT;
+            localStorage.removeItem('bgColor');
+        });
+    }
+
     // State
     // State
     let sixCardProb = 8; // Default 8%
@@ -1094,7 +1122,8 @@ document.addEventListener('DOMContentLoaded', () => {
             rarityTable6Pack6th: rarityTable6Pack6th,
             rarityTableGodPack: rarityTableGodPack, // Save God Pack table
             rarityCounts: rarityCounts, // Add counts to preset
-            rarityDesired: rarityDesired // Add desired to preset
+            rarityDesired: rarityDesired, // Add desired to preset
+            bgColor: bgColorInput ? bgColorInput.value : BG_COLOR_DEFAULT // Save background color
         };
     }
 
@@ -1134,6 +1163,12 @@ document.addEventListener('DOMContentLoaded', () => {
             Object.keys(rarityDesired).forEach(k => rarityDesired[k] = []);
         }
 
+
+        // Apply bgColor if present in preset
+        const presetBgColor = preset.bgColor || BG_COLOR_DEFAULT;
+        if (packBgTrapezoid) packBgTrapezoid.style.backgroundColor = presetBgColor;
+        if (bgColorInput) bgColorInput.value = presetBgColor;
+        localStorage.setItem('bgColor', presetBgColor);
 
         // Update Inputs in Settings Screen
         probInput.value = sixCardProb;
@@ -1200,6 +1235,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
+            // Color swatch
+            const colorSwatch = document.createElement('div');
+            colorSwatch.className = 'preset-color-swatch';
+            colorSwatch.style.backgroundColor = presets[name].bgColor || BG_COLOR_DEFAULT;
+
+            btnGroup.appendChild(colorSwatch);
             btnGroup.appendChild(btnLoad);
             btnGroup.appendChild(btnOverwrite);
             btnGroup.appendChild(btnDelete);
