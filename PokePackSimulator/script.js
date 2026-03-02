@@ -918,7 +918,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 { "rarity": "♢♢♢♢", "rate": 6.664 },
                 { "rarity": "♢♢♢", "rate": 19.81 },
                 { "rarity": "♢♢", "rate": 56 }
-            ]
+            ],
+            "bgColor": "#8be7fe"
         },
         "紅蓮ブレイズ": {
             "sixCardProb": 5.238,
@@ -984,7 +985,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 { "rarity": "☆", "rate": 30 }
             ],
             "rarityCounts": { "👑": 2, "🌈🌈": 4, "🌈": 10, "☆☆☆": 1, "☆☆": 11, "☆": 6, "♢♢♢♢": 5, "♢♢♢": 8, "♢♢": 24, "♢": 32 },
-            "rarityDesired": { "👑": [], "🌈🌈": [], "🌈": [], "☆☆☆": [], "☆☆": [7], "☆": [], "♢♢♢♢": [], "♢♢♢": [], "♢♢": [], "♢": [] }
+            "rarityDesired": { "👑": [], "🌈🌈": [], "🌈": [], "☆☆☆": [], "☆☆": [7], "☆": [], "♢♢♢♢": [], "♢♢♢": [], "♢♢": [], "♢": [] },
+            "bgColor": "#ff9e42"
         },
         "夢幻パレード": {
             "sixCardProb": 5.238,
@@ -1050,7 +1052,76 @@ document.addEventListener('DOMContentLoaded', () => {
                 { "rarity": "☆", "rate": 47.058 }
             ],
             "rarityCounts": { "👑": 2, "🌈🌈": 8, "🌈": 20, "☆☆☆": 2, "☆☆": 23, "☆": 27, "♢♢♢♢": 10, "♢♢♢": 28, "♢♢": 51, "♢": 66 },
-            "rarityDesired": { "👑": [], "🌈🌈": [], "🌈": [], "☆☆☆": [1], "☆☆": [6], "☆": [], "♢♢♢♢": [6], "♢♢♢": [], "♢♢": [], "♢": [] }
+            "rarityDesired": { "👑": [], "🌈🌈": [], "🌈": [], "☆☆☆": [1], "☆☆": [6], "☆": [], "♢♢♢♢": [6], "♢♢♢": [], "♢♢": [], "♢": [] },
+            "bgColor": "#ff9ef7"
+        },
+        "パルデアワンダー": {
+            "sixCardProb": 5.238,
+            "sixCardProbInput": 5.238,
+            "godPackProb": 0.05,
+            "godPackProbInput": 0.05,
+            "godPackMode": "no-rainbow",
+            "rarityTable4th": [
+                { "rarity": "👑", "rate": 0.04 },
+                { "rarity": "🌈🌈", "rate": 0 },
+                { "rarity": "🌈", "rate": 0 },
+                { "rarity": "☆☆☆", "rate": 0.222 },
+                { "rarity": "☆☆", "rate": 0.5 },
+                { "rarity": "☆", "rate": 2.572 },
+                { "rarity": "♢♢♢♢", "rate": 1.667 },
+                { "rarity": "♢♢♢", "rate": 5 },
+                { "rarity": "♢♢", "rate": 89.999 }
+            ],
+            "rarityTable5th": [
+                { "rarity": "👑", "rate": 0.16 },
+                { "rarity": "🌈🌈", "rate": 0 },
+                { "rarity": "🌈", "rate": 0 },
+                { "rarity": "☆☆☆", "rate": 0.889 },
+                { "rarity": "☆☆", "rate": 2 },
+                { "rarity": "☆", "rate": 10.286 },
+                { "rarity": "♢♢♢♢", "rate": 6.667 },
+                { "rarity": "♢♢♢", "rate": 20 },
+                { "rarity": "♢♢", "rate": 59.998 }
+            ],
+            "rarityTable6Pack4th": [
+                { "rarity": "👑", "rate": 0.04 },
+                { "rarity": "🌈🌈", "rate": 0 },
+                { "rarity": "🌈", "rate": 0 },
+                { "rarity": "☆☆☆", "rate": 0.222 },
+                { "rarity": "☆☆", "rate": 0.5 },
+                { "rarity": "☆", "rate": 2.572 },
+                { "rarity": "♢♢♢♢", "rate": 1.667 },
+                { "rarity": "♢♢♢", "rate": 5 },
+                { "rarity": "♢♢", "rate": 89.999 }
+            ],
+            "rarityTable6Pack5th": [
+                { "rarity": "👑", "rate": 0.16 },
+                { "rarity": "🌈🌈", "rate": 0 },
+                { "rarity": "🌈", "rate": 0 },
+                { "rarity": "☆☆☆", "rate": 0.889 },
+                { "rarity": "☆☆", "rate": 2 },
+                { "rarity": "☆", "rate": 10.286 },
+                { "rarity": "♢♢♢♢", "rate": 6.667 },
+                { "rarity": "♢♢♢", "rate": 20 },
+                { "rarity": "♢♢", "rate": 59.998 }
+            ],
+            "rarityTable6Pack6th": [
+                { "rarity": "🌈🌈", "rate": 31.82 },
+                { "rarity": "🌈", "rate": 68.18 },
+                { "rarity": "☆", "rate": 0 },
+                { "rarity": "♢♢♢", "rate": 0 }
+            ],
+            "rarityTableGodPack": [
+                { "rarity": "👑", "rate": 3.921 },
+                { "rarity": "🌈🌈", "rate": 0 },
+                { "rarity": "🌈", "rate": 0 },
+                { "rarity": "☆☆☆", "rate": 3.921 },
+                { "rarity": "☆☆", "rate": 45.098 },
+                { "rarity": "☆", "rate": 47.058 }
+            ],
+            "rarityCounts": { "👑": 2, "🌈🌈": 4, "🌈": 10, "☆☆☆": 1, "☆☆": 15, "☆": 6, "♢♢♢♢": 5, "♢♢♢": 12, "♢♢": 33, "♢": 43 },
+            "rarityDesired": { "👑": [], "🌈🌈": [2], "🌈": [3], "☆☆☆": [], "☆☆": [1, 7, 8], "☆": [], "♢♢♢♢": [], "♢♢♢": [], "♢♢": [], "♢": [] },
+            "bgColor": "#7cfee4"
         }
     };
 
@@ -1366,5 +1437,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
