@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bgColorInput = document.getElementById('bgColorInput');
     const btnResetBgColor = document.getElementById('btnResetBgColor');
     const packBgTrapezoid = document.querySelector('.pack-bg-trapezoid');
-    const BG_COLOR_DEFAULT = '#cc1111';
+    const BG_COLOR_DEFAULT = '#d35cf7';
 
     if (bgColorInput && packBgTrapezoid) {
         // Load saved color
@@ -1437,6 +1437,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
 
 
