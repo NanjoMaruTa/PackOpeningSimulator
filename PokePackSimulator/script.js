@@ -918,8 +918,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { "rarity": "♢♢♢♢", "rate": 6.664 },
                 { "rarity": "♢♢♢", "rate": 19.81 },
                 { "rarity": "♢♢", "rate": 56 }
-            ],
-            "rarityDesired":{"👑":[],"🌈🌈":[],"🌈":[],"☆☆☆":[],"☆☆":[],"☆":[],"♢♢♢♢":[],"♢♢♢":[],"♢♢":[],"♢":[]},"bgColor":"#8be7fe"}
+            ]
         },
         "紅蓮ブレイズ": {
             "sixCardProb": 5.238,
@@ -1367,4 +1366,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
 
