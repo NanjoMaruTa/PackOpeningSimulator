@@ -66,7 +66,7 @@ body {
 /* app-container 基準で配置するため top にヘッダー高さを加算 */
 .pack-bg-trapezoid {
     position: absolute;
-    top: 69px;
+    top: 72px;
     /* app-header の高さ（padding 20px + h1 + border = 約63px）分ずらす */
     left: 0;
     width: 100%;
@@ -1339,4 +1339,5 @@ body {
     margin: 10px auto;
     /* Center the image */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
 }
