@@ -35,6 +35,8 @@ body {
     flex-direction: column;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     position: relative;
+    overflow: hidden;
+    /* Prevent trapezoid from leaking outside container */
 }
 
 .app-header {
@@ -42,6 +44,10 @@ body {
     text-align: center;
     background: linear-gradient(135deg, #ffffff 0%, #f7f7f7 100%);
     border-bottom: 1px solid #eee;
+    position: relative;
+    /* Establish stacking context */
+    z-index: 10;
+    /* Above trapezoid and content */
 }
 
 .app-header h1 {
@@ -60,13 +66,15 @@ body {
     /* Distribute space */
     padding: 20px;
     position: relative;
+    z-index: 2;
+    /* Content sits above trapezoid background */
 }
 
 /* Trapezoid background behind pack area */
 /* app-container 基準で配置するため top にヘッダー高さを加算 */
 .pack-bg-trapezoid {
     position: absolute;
-    top: 72px;
+    top: 69px;
     /* app-header の高さ（padding 20px + h1 + border = 約63px）分ずらす */
     left: 0;
     width: 100%;
@@ -76,10 +84,9 @@ body {
     /* Default GenePurple */
     clip-path: polygon(0% 0%, 100% 0%, 100% 40%, 0% 65%);
     /* Trapezoid: full-width at top, narrows from left at bottom */
-    z-index: 0;
+    z-index: 1;
+    /* Sits behind content (z-index 2) but above app body */
     /* Behind pack and button */
-    transition: opacity 0.5s ease;
-    /* Smooth transition */
 }
 
 /* Make trapezoid lighter in results view */
@@ -1339,5 +1346,4 @@ body {
     margin: 10px auto;
     /* Center the image */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-
 }
