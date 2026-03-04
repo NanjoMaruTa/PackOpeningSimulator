@@ -78,6 +78,26 @@ body {
     /* Behind pack and button */
 }
 
+/* Setting name label - white pill in top-left of trapezoid */
+.setting-name-label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: rgba(255, 255, 255, 0.92);
+    border-radius: 10px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #444;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    max-width: 55%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 1;
+    pointer-events: none;
+}
+
 /* Pack Styles */
 .pack-container {
     position: relative;
@@ -1307,5 +1327,4 @@ body {
     margin: 10px auto;
     /* Center the image */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-
 }

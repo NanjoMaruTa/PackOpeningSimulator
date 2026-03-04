@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSaveSettings = document.getElementById('btnSaveSettings');
     const btnCancelSettings = document.getElementById('btnCancelSettings');
 
+    // Header title element
+    const appHeaderTitle = document.getElementById('appHeaderTitle');
+
     // Usage Modal elements
     const usageModal = document.getElementById('usageModal');
     const btnCloseUsage = document.getElementById('btnCloseUsage');
@@ -45,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         bgColorInput.addEventListener('input', () => {
             packBgTrapezoid.style.backgroundColor = bgColorInput.value;
-            localStorage.setItem('bgColor', bgColorInput.value);
+            // Deferred saving to localStorage until Save Settings
         });
     }
 
@@ -53,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnResetBgColor.addEventListener('click', () => {
             packBgTrapezoid.style.backgroundColor = BG_COLOR_DEFAULT;
             if (bgColorInput) bgColorInput.value = BG_COLOR_DEFAULT;
-            localStorage.removeItem('bgColor');
+            // Deferred localStorage remove until Save Settings
         });
     }
 
@@ -101,6 +104,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // God Pack Mode: 'uniform', 'no-rainbow', 'custom'
     let godPackMode = 'no-rainbow'; // Default: exclude rainbow cards
+
+    // Pending preset: holds a preset that was loaded but not yet saved
+    let _pendingPreset = null;
+
+    // Current setting name for display
+    let currentSettingName = localStorage.getItem('pokePackSettingName') || '設定なし';
+
+    const settingNameLabel = document.getElementById('settingNameLabel');
+    function updateSettingNameLabel(name) {
+        currentSettingName = name;
+        localStorage.setItem('pokePackSettingName', name);
+        if (settingNameLabel) settingNameLabel.textContent = name;
+    }
 
     // Function to handle pack opening
     function openPack(count) {
@@ -165,6 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (btnUsage) {
             btnUsage.classList.add('hidden');
+        }
+
+        // Change header title to current setting name
+        if (appHeaderTitle) {
+            appHeaderTitle.textContent = currentSettingName;
         }
 
         // Show card reveal screen
@@ -584,6 +605,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset scroll position for next time
         cardRevealScreen.scrollTop = 0;
 
+        // Reset header title
+        if (appHeaderTitle) {
+            appHeaderTitle.textContent = 'パック開封シミュレータ';
+        }
+
         // Show home screen elements
         packContainer.classList.remove('hidden');
         controlsContainer.classList.remove('hidden');
@@ -630,9 +656,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return section;
     }
 
-    function openSettings() {
-        probInput.value = sixCardProb;
-        godProbInput.value = godPackProb;
+    function openSettings(presetToLoad) {
+        // If no preset was passed in, restore UI from current global state
+        if (!presetToLoad) {
+            probInput.value = sixCardProb;
+            godProbInput.value = godPackProb;
+
+            if (bgColorInput && packBgTrapezoid) {
+                const savedBgColor = localStorage.getItem('bgColor') || BG_COLOR_DEFAULT;
+                bgColorInput.value = savedBgColor;
+                packBgTrapezoid.style.backgroundColor = savedBgColor;
+            }
+        }
+        // Note: if presetToLoad is provided, applyPreset has already filled the inputs
 
         // Regenerate rarity settings
         raritySettingsContainer.innerHTML = '';
@@ -660,7 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // God Pack Settings
         const headerGod = document.createElement('h2');
-        headerGod.textContent = 'レア封入時の設定';
+        headerGod.textContent = 'レア封入の排出確率';
         headerGod.style.fontSize = '1.1rem';
         headerGod.style.marginTop = '20px';
         raritySettingsContainer.appendChild(headerGod);
@@ -696,7 +732,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         raritySettingsContainer.appendChild(modeSelector);
 
-        const godInputsSection = renderRarityInputs(rarityTableGodPack, '全カード共通', 'god');
+        const godInputsSection = renderRarityInputs(rarityTableGodPack, 'カスタム確率', 'god');
         godInputsSection.id = 'godPackInputsSection';
         raritySettingsContainer.appendChild(godInputsSection);
 
@@ -711,9 +747,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function closeSettings() {
+        // If a preset was pending (loaded but not saved), revert global state
+        if (_pendingPreset) {
+            _pendingPreset = null;
+            // Reload last committed settings from localStorage
+            loadActiveSettings();
+        }
+
         settingsScreen.classList.add('hidden');
         packContainer.classList.remove('hidden');
         controlsContainer.classList.remove('hidden');
+
+        if (packBgTrapezoid) {
+            const savedBgColor = localStorage.getItem('bgColor') || BG_COLOR_DEFAULT;
+            packBgTrapezoid.style.backgroundColor = savedBgColor;
+        }
     }
 
     function updateGodPackInputsState() {
@@ -743,6 +791,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveSettings() {
+        // --- Snapshot before saving ---
+        const prevSixCardProb = sixCardProb;
+        const prevGodPackProb = godPackProb;
+        const prevGodPackMode = godPackMode;
+        const prevTable4th = JSON.stringify(rarityTable4th);
+        const prevTable5th = JSON.stringify(rarityTable5th);
+        const prevTable6_4 = JSON.stringify(rarityTable6Pack4th);
+        const prevTable6_5 = JSON.stringify(rarityTable6Pack5th);
+        const prevTable6_6 = JSON.stringify(rarityTable6Pack6th);
+        const prevTableGod = JSON.stringify(rarityTableGodPack);
+
         // Save 6-card prob
         const val = parseFloat(probInput.value);
         if (!isNaN(val) && val >= 0 && val <= 100) {
@@ -772,6 +831,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Save God Pack Table
         updateTableFromInputs(rarityTableGodPack, 'god');
+
+        if (bgColorInput) {
+            const newColor = bgColorInput.value;
+            if (newColor === BG_COLOR_DEFAULT) {
+                localStorage.removeItem('bgColor');
+            } else {
+                localStorage.setItem('bgColor', newColor);
+            }
+        }
+
+        // Preset was confirmed by saving, clear pending state
+        if (_pendingPreset) {
+            updateSettingNameLabel(_pendingPreset._presetName || 'カスタム設定');
+            _pendingPreset = null;
+        } else {
+            // Only update to カスタム設定 if something actually changed
+            const changed =
+                sixCardProb !== prevSixCardProb ||
+                godPackProb !== prevGodPackProb ||
+                godPackMode !== prevGodPackMode ||
+                JSON.stringify(rarityTable4th) !== prevTable4th ||
+                JSON.stringify(rarityTable5th) !== prevTable5th ||
+                JSON.stringify(rarityTable6Pack4th) !== prevTable6_4 ||
+                JSON.stringify(rarityTable6Pack5th) !== prevTable6_5 ||
+                JSON.stringify(rarityTable6Pack6th) !== prevTable6_6 ||
+                JSON.stringify(rarityTableGodPack) !== prevTableGod;
+            if (changed) {
+                updateSettingNameLabel('カスタム設定');
+            }
+        }
 
         saveActiveSettings(); // Save to localStorage for persistence
         closeSettings();
@@ -853,6 +942,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveCountSettings() {
         let valid = true;
 
+        // --- Snapshot before saving (counts only; desired does not affect label) ---
+        const prevCounts = JSON.stringify(rarityCounts);
+
         // Update values
         Object.keys(rarityCounts).forEach(rarity => {
             // Save Counts
@@ -889,6 +981,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         saveActiveSettings(); // Save to localStorage for persistence
+
+        // Only mark as カスタム設定 if counts actually changed
+        if (JSON.stringify(rarityCounts) !== prevCounts) {
+            updateSettingNameLabel('カスタム設定');
+        }
+
         closeCountSettings();
     }
 
@@ -917,7 +1015,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { "rarity": "☆", "rate": 10.288 },
                 { "rarity": "♢♢♢♢", "rate": 6.664 },
                 { "rarity": "♢♢♢", "rate": 19.81 },
-                { "rarity": "♢♢", "rate": 56 }
+                { "rarity": "♢♢", "rate": 56 },
             ],
             "bgColor": "#8be7fe"
         },
@@ -1165,9 +1263,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Sync the main prob input if it exists
                 if (probInput) probInput.value = sixCardProb;
                 if (godProbInput) godProbInput.value = godPackProb;
+
+                // Restore bgColor
+                const savedBgColor = localStorage.getItem('bgColor');
+                if (savedBgColor && packBgTrapezoid) {
+                    packBgTrapezoid.style.backgroundColor = savedBgColor;
+                    if (bgColorInput) bgColorInput.value = savedBgColor;
+                }
             } catch (e) {
                 console.error('Failed to load active settings', e);
             }
+        }
+
+        // Restore setting name label from localStorage
+        if (settingNameLabel) {
+            settingNameLabel.textContent = currentSettingName;
         }
     }
 
@@ -1198,61 +1308,60 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    function applyPreset(preset) {
+    function applyPreset(preset, presetName) {
         if (!preset) return;
 
-        // Update variables
-        sixCardProb = preset.sixCardProbInput;
-        // Check if preset has god pack prob, else default (for backward compatibility)
-        godPackProb = preset.godPackProbInput !== undefined ? preset.godPackProbInput : (preset.godPackProb !== undefined ? preset.godPackProb : 0.05);
-        // Load God Pack mode with backward compatibility
-        godPackMode = preset.godPackMode !== undefined ? preset.godPackMode : 'no-rainbow';
+        // --- Preset load is "UI only" ---
+        // Temporarily overwrite the rarity table variables so openSettings
+        // can render the correct inputs. The actual global state and
+        // localStorage are only committed when the user clicks Save.
+        // We first snapshot the current state so closeSettings can restore it.
+        _pendingPreset = {
+            _presetName: presetName || 'カスタム設定',
+            sixCardProb: preset.sixCardProbInput,
+            godPackProb: preset.godPackProbInput !== undefined ? preset.godPackProbInput : (preset.godPackProb !== undefined ? preset.godPackProb : 0.05),
+            godPackMode: preset.godPackMode !== undefined ? preset.godPackMode : 'no-rainbow',
+            rarityTable4th: JSON.parse(JSON.stringify(preset.rarityTable4th)),
+            rarityTable5th: JSON.parse(JSON.stringify(preset.rarityTable5th)),
+            rarityTable6Pack4th: preset.rarityTable6Pack4th ? JSON.parse(JSON.stringify(preset.rarityTable6Pack4th)) : rarityTable6Pack4th,
+            rarityTable6Pack5th: preset.rarityTable6Pack5th ? JSON.parse(JSON.stringify(preset.rarityTable6Pack5th)) : rarityTable6Pack5th,
+            rarityTable6Pack6th: preset.rarityTable6Pack6th ? JSON.parse(JSON.stringify(preset.rarityTable6Pack6th)) : rarityTable6Pack6th,
+            rarityTableGodPack: preset.rarityTableGodPack ? JSON.parse(JSON.stringify(preset.rarityTableGodPack)) : rarityTableGodPack,
+            rarityCounts: preset.rarityCounts ? JSON.parse(JSON.stringify(preset.rarityCounts)) : rarityCounts,
+            rarityDesired: preset.rarityDesired ? JSON.parse(JSON.stringify(preset.rarityDesired)) : rarityDesired,
+            bgColor: preset.bgColor || BG_COLOR_DEFAULT
+        };
 
-        rarityTable4th = JSON.parse(JSON.stringify(preset.rarityTable4th));
-        rarityTable5th = JSON.parse(JSON.stringify(preset.rarityTable5th));
+        // Temporarily apply to global vars so openSettings renders them
+        sixCardProb = _pendingPreset.sixCardProb;
+        godPackProb = _pendingPreset.godPackProb;
+        godPackMode = _pendingPreset.godPackMode;
+        rarityTable4th = _pendingPreset.rarityTable4th;
+        rarityTable5th = _pendingPreset.rarityTable5th;
+        rarityTable6Pack4th = _pendingPreset.rarityTable6Pack4th;
+        rarityTable6Pack5th = _pendingPreset.rarityTable6Pack5th;
+        rarityTable6Pack6th = _pendingPreset.rarityTable6Pack6th;
+        rarityTableGodPack = _pendingPreset.rarityTableGodPack;
+        rarityCounts = _pendingPreset.rarityCounts;
+        rarityDesired = _pendingPreset.rarityDesired;
 
-        // Handle backward compatibility for old presets (fill 6-pack tables with default logic if missing)
-        if (preset.rarityTable6Pack4th) {
-            rarityTable6Pack4th = JSON.parse(JSON.stringify(preset.rarityTable6Pack4th));
-            rarityTable6Pack5th = JSON.parse(JSON.stringify(preset.rarityTable6Pack5th));
-            rarityTable6Pack6th = JSON.parse(JSON.stringify(preset.rarityTable6Pack6th));
-        }
-
-        // Handle God Pack table compatibility
-        if (preset.rarityTableGodPack) {
-            rarityTableGodPack = JSON.parse(JSON.stringify(preset.rarityTableGodPack));
-        }
-
-        if (preset.rarityCounts) {
-            rarityCounts = JSON.parse(JSON.stringify(preset.rarityCounts));
-        }
-
-        if (preset.rarityDesired) {
-            rarityDesired = JSON.parse(JSON.stringify(preset.rarityDesired));
-        } else {
-            // Reset to empty if preset doesn't have it
-            Object.keys(rarityDesired).forEach(k => rarityDesired[k] = []);
-        }
-
-
-        // Apply bgColor if present in preset
-        const presetBgColor = preset.bgColor || BG_COLOR_DEFAULT;
-        if (packBgTrapezoid) packBgTrapezoid.style.backgroundColor = presetBgColor;
-        if (bgColorInput) bgColorInput.value = presetBgColor;
-        localStorage.setItem('bgColor', presetBgColor);
-
-        // Update Inputs in Settings Screen
+        // Update probInput / godProbInput before openSettings reads them
         probInput.value = sixCardProb;
         godProbInput.value = godPackProb;
 
-        // Regenerate rarity settings UI
-        openSettings(); // Re-use openSettings logic to rebuild DOM
-        // Since openSettings shows the screen, we might just want to refresh the inputs if already open, 
-        // but rebuilding is safer for structure.
+        // Show bgColor in picker (preview only, NOT saved to localStorage yet)
+        if (bgColorInput && packBgTrapezoid) {
+            bgColorInput.value = _pendingPreset.bgColor;
+            packBgTrapezoid.style.backgroundColor = _pendingPreset.bgColor;
+        }
+
+        // Rebuild the settings UI with the preset values
+        // Pass a flag so openSettings skips its own state-restore logic
+        openSettings('preset');
 
         // Close modal
         presetModal.classList.add('hidden');
-        alert('プリセットを読み込みました');
+        alert('プリセットを読み込みました。\nページ下部の「保存」ボタンで確定、「キャンセル」で元に戻ります。');
     }
 
     function renderPresets() {
@@ -1279,7 +1388,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnLoad = document.createElement('button');
             btnLoad.className = 'preset-btn-sm btn-load';
             btnLoad.textContent = '読込';
-            btnLoad.onclick = () => applyPreset(presets[name]);
+            btnLoad.onclick = () => applyPreset(presets[name], name);
 
             // Overwrite
             const btnOverwrite = document.createElement('button');
@@ -1437,7 +1546,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-
-
-
