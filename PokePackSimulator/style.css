@@ -63,19 +63,29 @@ body {
 }
 
 /* Trapezoid background behind pack area */
+/* app-container 基準で配置するため top にヘッダー高さを加算 */
 .pack-bg-trapezoid {
     position: absolute;
-    top: 0;
+    top: 69px;
+    /* app-header の高さ（padding 20px + h1 + border = 約63px）分ずらす */
     left: 0;
     width: 100%;
     height: 55%;
-    /* Covers header down to roughly below the pack */
+    /* Covers just below header down to roughly below the pack */
     background-color: #d35cf7;
-    /* Default red */
+    /* Default GenePurple */
     clip-path: polygon(0% 0%, 100% 0%, 100% 40%, 0% 65%);
     /* Trapezoid: full-width at top, narrows from left at bottom */
     z-index: 0;
     /* Behind pack and button */
+    transition: opacity 0.5s ease;
+    /* Smooth transition */
+}
+
+/* Make trapezoid lighter in results view */
+.app-results-view .pack-bg-trapezoid {
+    opacity: 0.25;
+    /* 25% opacity to make it look lighter */
 }
 
 /* Setting name label - white pill in top-left of trapezoid */
@@ -464,6 +474,8 @@ body {
     padding-bottom: 20px;
     border-bottom: 2px dashed #ddd;
     /* Visual separator */
+    position: relative;
+    z-index: 10;
 }
 
 .pack-result-row:last-child {
@@ -504,14 +516,14 @@ body {
 }
 
 .white-card {
-    width: 80px;
+    width: 79px;
     /* Increased size */
     height: 112px;
     /* Aspect ratio roughly 2.5:3.5 */
     background-color: #ffffff;
     border: 2px solid #000;
     /* Added black border */
-    border-radius: 6px;
+    border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
     position: relative;
@@ -526,56 +538,56 @@ body {
 
 .white-card.rarity-crown {
     background-image: url('images/クラウン.png');
-    background-size: 104%;
+    background-size: 105%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-rainbow2 {
     background-image: url('images/色違い.png');
-    background-size: 104%;
+    background-size: 105%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-rainbow {
     background-image: url('images/色違い.png');
-    background-size: 104%;
+    background-size: 105%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-star3 {
     background-image: url('images/イマーシブ.png');
-    background-size: 104%;
+    background-size: 105%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-star2 {
     background-image: url('images/星2.png');
-    background-size: 104%;
+    background-size: 105%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-star1 {
     background-image: url('images/星1.png');
-    background-size: 104%;
+    background-size: 105%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-dia4 {
     background-image: url('images/ダイヤ4.png');
-    background-size: 104%;
+    background-size: 105%;
     background-position: center;
     border: 2px solid transparent;
 }
 
 .white-card.rarity-dia3 {
     background-image: url('images/ダイヤ3.png');
-    background-size: 104%;
+    background-size: 105%;
     background-position: center;
     border: 2px solid transparent;
     /* Keep size consistent with other cards (80+2+2 = 84px) */

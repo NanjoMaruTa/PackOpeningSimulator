@@ -14,6 +14,11 @@
             <h1 id="appHeaderTitle">パック開封シミュレータ</h1>
         </header>
 
+        <!-- Trapezoid background - placed directly under app-container for fixed positioning -->
+        <div class="pack-bg-trapezoid">
+            <div class="setting-name-label" id="settingNameLabel">設定なし</div>
+        </div>
+
         <main class="main-content">
             <!-- Session Stats Bar (Fixed below header, initially hidden) -->
             <div class="session-stats-bar hidden" id="sessionStatsBar">
@@ -24,11 +29,6 @@
             <div class="desired-stats-bar hidden" id="desiredStatsBar"></div>
 
             <button id="btnUsage" class="btn-usage">つかいかた</button>
-
-            <!-- Trapezoid background behind pack area -->
-            <div class="pack-bg-trapezoid">
-                <div class="setting-name-label" id="settingNameLabel">設定なし</div>
-            </div>
 
             <div class="pack-container" id="packContainer">
                 <div class="pixel-sparkles"></div>

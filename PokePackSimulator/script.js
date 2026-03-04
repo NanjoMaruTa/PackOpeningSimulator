@@ -190,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show card reveal screen
         cardRevealScreen.classList.remove('hidden');
+        document.querySelector('.app-container').classList.add('app-results-view');
 
         // Update Button Text based on pack count
         if (packCount > 1) {
@@ -590,6 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetToHome() {
         // Hide card screen
         cardRevealScreen.classList.add('hidden');
+        document.querySelector('.app-container').classList.remove('app-results-view');
 
         // Hide Stats Bars
         if (sessionStatsBar) {
